@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+    <LinearLayout android:orientation="vertical"
+                  android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+                  android:descendantFocusability="beforeDescendants"
+                  android:focusableInTouchMode="true"
+            >
+        <EditText
+                android:id="@+id/input_text"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top"
+                android:singleLine="false"
+                android:lines="5"
+                android:hint="@string/inputtext_hint"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:paddingLeft="3dp"
+                android:scrollbarStyle="insideInset"
+                android:scrollbars="vertical"
+                android:overScrollMode="always"
+                android:background="@drawable/white_bg"
+                android:textColor="@color/black" />
+        <RelativeLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+            <Spinner android:id="@+id/input_spinner"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:entries="@array/types_array"
+                     android:spinnerMode="dialog"
+                     android:prompt="@string/input_prompt"
+                     android:layout_marginLeft="5dp" />
+            <ImageView android:id="@+id/forward_arrow"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:src="@drawable/ic_arrow"
+                       android:layout_marginTop="13dp"
+                       android:layout_toRightOf="@id/input_spinner"/>
+            <Spinner android:id="@+id/target_spinner"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:entries="@array/types_array"
+                     android:spinnerMode="dialog"
+                     android:prompt="@string/target_prompt"
+                     android:layout_toRightOf="@id/forward_arrow" />
+            <Button android:id="@+id/convert_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="5dip"
+                    android:text="@string/convert_button"
+                    android:textSize="16sp"/>
+            <Button android:id="@+id/copy_button1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toLeftOf="@id/convert_button"
+                    android:text="@string/copy_button"
+                    android:textSize="16sp"/>
+        </RelativeLayout>
+        <EditText
+                android:id="@+id/output_text"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top"
+                android:singleLine="false"
+                android:lines="5"
+                android:hint="@string/outputtext_hint"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:paddingLeft="3dp"
+                android:scrollbarStyle="insideInset"
+                android:scrollbars="vertical"
+                android:overScrollMode="always"
+                android:background="@drawable/white_bg"
+                android:textColor="@color/black" />
+        <RelativeLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+            <Button android:id="@+id/copy_button2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/copy_button"
+                android:textSize="16sp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="5dip" />
+        </RelativeLayout>
+    </LinearLayout>
+</ScrollView>
+

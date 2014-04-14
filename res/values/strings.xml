@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TextEncoder</string>
+    <string name="inputtext_hint">Input</string>
+    <string name="outputtext_hint">Output</string>
+    <string name="fromtype_button">From</string>
+    <string name="to_text">To</string>
+    <string name="copy_button">Copy</string>
+    <string name="convert_button">Convert</string>
+    <string name="input_prompt">Choose input type</string>
+    <string name="target_prompt">Choose target type</string>
+    <string-array name="types_array">
+        <item>ASCII</item>
+        <item>Decimal</item>
+        <item>Hex</item>
+        <item>Binary</item>
+    </string-array>
+</resources>
