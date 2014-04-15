@@ -1,0 +1,10 @@
+This product includes software developed at
+The Apache Software Foundation (http://www.apache.org/).
+
+res/drawable
+Contains assets created with Android Asset Studio at http://j.mp/androidassetstudio
+Licensed under Creative Commons Attribution 3.0 Unported License
+
+res/drawable/ic_launcher.png
+Launcher icon sourced from http://icons.webtoolhub.com
+Licensed under Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License
