@@ -90,24 +90,28 @@ public class MainActivity extends Activity {
         }
 
         Message message;
-        // Construct appropriate message type
+        // Construct appropriate message type, call encoding method
         try {
             switch ((int) mInputTypeSpinner.getSelectedItemId()) {
-                case ASCII_ID: message = new AsciiMessage(mInputTextString);
-                case BINARY_ID: message = new BinaryMessage(mInputTextString); break;
-                case DECIMAL_ID: message = new DecimalMessage(mInputTextString);
-                case HEX_ID: message = new HexMessage(mInputTextString);
+                case ASCII_ID:
+                    message = new AsciiMessage(mInputTextString);
+                    convertFromAscii((AsciiMessage)message);
+                    break;
+                case BINARY_ID:
+                    message = new BinaryMessage(mInputTextString);
+                    convertFromBinary((BinaryMessage) message);
+                    break;
+                case DECIMAL_ID:
+                    message = new DecimalMessage(mInputTextString);
+                    convertFromDecimal((DecimalMessage) message);
+                    break;
+                case HEX_ID:
+                    message = new HexMessage(mInputTextString);
+                    convertFromHex((HexMessage) message);
+                    break;
             }
         } catch (MessageConstructException | DecoderException e) {
             Toast.makeText(getBaseContext(), Message.EXCEPTION_MESSAGE, Toast.LENGTH_SHORT).show();
-        }
-
-        // Attempt appropriate encoding
-        switch ((int) mTargetTypeSpinner.getSelectedItemId()) {
-            case ASCII_ID: break;
-            case DECIMAL_ID: break;
-            case HEX_ID: break;
-            case BINARY_ID: break;
         }
     }
 
@@ -119,7 +123,85 @@ public class MainActivity extends Activity {
     private void updateOutputTextBox(String output) {
         mOutputEditText.setText(output);
     }
+      
+    private void convertFromAscii(AsciiMessage message) {
+        try {
+            switch ((int) mTargetTypeSpinner.getSelectedItemId()) {
+                case BINARY_ID:
+                    BinaryMessage bm = message.toBinaryMessage();
+                    updateOutputTextBox(bm.toString());
+                    break;
+                case DECIMAL_ID:
+                    DecimalMessage dm = message.toDecimalMessage();
+                    updateOutputTextBox(dm.toString());
+                    break;
+                case HEX_ID:
+                    HexMessage hm = message.toHexMessage();
+                    updateOutputTextBox(hm.toString());
+                    break;
+            }
+        } catch (MessageConstructException e) {
+            Toast.makeText(getBaseContext(), Message.EXCEPTION_MESSAGE, Toast.LENGTH_SHORT).show();
+        }
+    }
 
+    private void convertFromBinary(BinaryMessage message) {
+        switch ((int) mTargetTypeSpinner.getSelectedItemId()) {
+            case ASCII_ID:
+                AsciiMessage am = message.toAsciiMessage();
+                updateOutputTextBox(am.toString());
+                break;
+            case DECIMAL_ID:
+                DecimalMessage dm = message.toDecimalMessage();
+                updateOutputTextBox(dm.toString());
+                break;
+            case HEX_ID:
+                HexMessage hm = message.toHexMessage();
+                updateOutputTextBox(hm.toString());
+                break;
+        }
+    }
 
+    private void convertFromDecimal(DecimalMessage message) {
+        try {
+            switch ((int) mTargetTypeSpinner.getSelectedItemId()) {
+                case ASCII_ID:
+                    AsciiMessage am = message.toAsciiMessage();
+                    updateOutputTextBox(am.toString());
+                    break;
+                case BINARY_ID:
+                    BinaryMessage bm = message.toBinaryMessage();
+                    updateOutputTextBox(bm.toString());
+                    break;
+                case HEX_ID:
+                    HexMessage hm = message.toHexMessage();
+                    updateOutputTextBox(hm.toString());
+                    break;
+            }
+        } catch (MessageConstructException e) {
+            Toast.makeText(getBaseContext(), Message.EXCEPTION_MESSAGE, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void convertFromHex(HexMessage message) {
+        try {
+            switch ((int) mTargetTypeSpinner.getSelectedItemId()) {
+                case ASCII_ID:
+                    AsciiMessage am = message.toAsciiMessage();
+                    updateOutputTextBox(am.toString());
+                    break;
+                case BINARY_ID:
+                    BinaryMessage bm = message.toBinaryMessage();
+                    updateOutputTextBox(bm.toString());
+                    break;
+                case DECIMAL_ID:
+                    DecimalMessage dm = message.toDecimalMessage();
+                    updateOutputTextBox(dm.toString());
+                    break;
+            }
+        } catch (MessageConstructException e) {
+            Toast.makeText(getBaseContext(), Message.EXCEPTION_MESSAGE, Toast.LENGTH_SHORT).show();
+        }
+    }
 }
 
