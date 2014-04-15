@@ -5,6 +5,7 @@ import java.util.Arrays;
 
 public class Message {
 
+    public static final String EXCEPTION_MESSAGE = "Invalid input format";
     private byte[] characterCodeArray;
 
     public Message() { }
