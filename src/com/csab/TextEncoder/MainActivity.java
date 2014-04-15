@@ -1,8 +1,7 @@
 package com.csab.TextEncoder;
 
 import android.app.Activity;
-import android.content.ClipData;
-import android.content.ClipboardManager;
+import android.text.ClipboardManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -13,6 +12,7 @@ import android.view.View.OnClickListener;
 import android.widget.*;
 import org.apache.commons.codec.DecoderException;
 
+@SuppressWarnings("deprecation")
 public class MainActivity extends Activity {
 
     private ClipboardManager mClipboard;
@@ -27,6 +27,7 @@ public class MainActivity extends Activity {
 
 
     @Override
+    @SuppressWarnings("deprecation")
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
@@ -71,15 +72,13 @@ public class MainActivity extends Activity {
 
         topCopyButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                ClipData clip = ClipData.newPlainText("input text", mInputEditText.getText());
-                mClipboard.setPrimaryClip(clip);
+                mClipboard.setText(mInputEditText.getText());
             }
         });
 
         bottomCopyButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                ClipData clip = ClipData.newPlainText("output text", mOutputEditText.getText());
-                mClipboard.setPrimaryClip(clip);
+                mClipboard.setText(mOutputEditText.getText());
             }
         });
     }
