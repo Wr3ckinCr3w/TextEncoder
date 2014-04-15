@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
@@ -83,6 +84,30 @@ public class MainActivity extends Activity {
         });
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.clear_all:
+                mInputEditText.setText("");
+                mOutputEditText.setText("");
+                return true;
+            case R.id.rate_app:
+                // TODO: fill in stub
+                return true;
+            case R.id.donate:
+                // TODO: fill in stub
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     private void startProcess() {
         // Check if input type and output type are the same
         if (selectedTypesAreEqual()) {
@@ -113,6 +138,7 @@ public class MainActivity extends Activity {
         } catch (MessageConstructException | DecoderException e) {
             Toast.makeText(getBaseContext(), Message.EXCEPTION_MESSAGE, Toast.LENGTH_SHORT).show();
         }
+        // TODO: add Base64Message, OctalMessage
     }
 
     private boolean selectedTypesAreEqual() {
