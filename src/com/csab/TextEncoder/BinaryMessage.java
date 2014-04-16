@@ -1,5 +1,8 @@
 package com.csab.TextEncoder;
 
+import java.util.List;
+import com.google.common.base.Splitter;
+
 public class BinaryMessage extends Message {
 
     private long[] longArrayOfBytes;
@@ -14,11 +17,14 @@ public class BinaryMessage extends Message {
     }
 
     public BinaryMessage(String inputString) throws MessageConstructException {
-        if (!isValid(inputString = inputString.replace(" ",""))) {
-            throw new MessageConstructException(EXCEPTION_MESSAGE);
+        inputString = inputString.replaceAll("\\s","");
+        if (!isValid(inputString)) {
+            throw new MessageConstructException(Message.EXCEPTION_MESSAGE);
         }
+        List<String> list = Splitter.fixedLength(8).splitToList(inputString);
+        String[] stringArrayOfBytes = new String[list.size()];
+        stringArrayOfBytes = list.toArray(stringArrayOfBytes);
 
-        String[] stringArrayOfBytes = inputString.split("(?<=\\G.{8})");
         longArrayOfBytes = new long[stringArrayOfBytes.length];
         for (int i = 0; i < longArrayOfBytes.length; i++) {
             longArrayOfBytes[i] = Long.valueOf(stringArrayOfBytes[i], 2);
@@ -56,7 +62,6 @@ public class BinaryMessage extends Message {
     }
 
     private boolean isValid(String inputString) {
-        inputString = inputString.replace(" ","");
         if (inputString.length() % NUMBER_OF_BITS != 0) {
             return false;
         }
