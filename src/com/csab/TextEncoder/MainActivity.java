@@ -2,6 +2,8 @@ package com.csab.TextEncoder;
 
 import android.text.ClipboardManager;
 import android.os.Bundle;
+import android.content.Intent;
+import android.net.Uri;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -18,7 +20,8 @@ public class MainActivity extends SherlockActivity {
     private Spinner mInputTypeSpinner, mTargetTypeSpinner;
     private EditText mInputEditText, mOutputEditText;
     private String mInputTextString;
-    private static final CharSequence DEFAULT_TARGET_TYPE = "Binary";
+    private static final String DEFAULT_TARGET_TYPE = "Binary";
+    private static final String EQUAL_TYPES_MESSAGE = "Input / output types are the same";
     private static final int ASCII_ID = 0;
     private static final int DECIMAL_ID = 1;
     private static final int HEX_ID = 2;
@@ -96,7 +99,7 @@ public class MainActivity extends SherlockActivity {
                 mOutputEditText.setText("");
                 return true;
             case R.id.rate_app:
-                // TODO: fill in stub
+                openPlayStore();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -106,7 +109,8 @@ public class MainActivity extends SherlockActivity {
     private void startProcess() {
         // Check if input type and output type are the same
         if (selectedTypesAreEqual()) {
-            updateOutputTextBox(mInputTextString);
+            Toast.makeText(getBaseContext(), EQUAL_TYPES_MESSAGE, Toast.LENGTH_SHORT).show();
+            return;
         }
 
         Message message;
@@ -139,6 +143,15 @@ public class MainActivity extends SherlockActivity {
     private boolean selectedTypesAreEqual() {
         return (mInputTypeSpinner.getSelectedItem().toString().equals(
                 mTargetTypeSpinner.getSelectedItem().toString()));
+    }
+
+    private void openPlayStore() {
+        final String appPackageName = getPackageName();
+        try {
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+        } catch (android.content.ActivityNotFoundException anfe) {
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + appPackageName)));
+        }
     }
 
     private void updateOutputTextBox(String output) {
