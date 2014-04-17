@@ -3,18 +3,15 @@
 <!-- Generated with http://android-holo-colors.com -->
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-  <style name="AppTheme" parent="android:Theme.Holo">
+  <style name="AppTheme" parent="Theme.Sherlock">
 
+    <item name="android:editTextStyle">@style/EditTextAppTheme</item>
     <item name="android:textColorHighlight">#9933b5e5</item>
-    <item name="android:textSelectHandleLeft">@drawable/apptheme_text_select_handle_left</item>
-    <item name="android:textSelectHandleRight">@drawable/apptheme_text_select_handle_right</item>
-    <item name="android:textSelectHandle">@drawable/apptheme_text_select_handle_middle</item>
-
+    <item name="android:autoCompleteTextViewStyle">@style/AutoCompleteTextViewAppTheme</item>
     <item name="android:buttonStyle">@style/ButtonAppTheme</item>
-
     <item name="android:imageButtonStyle">@style/ImageButtonAppTheme</item>
-
-    <item name="android:dropDownSpinnerStyle">@style/SpinnerAppTheme</item>
+    <item name="android:spinnerStyle">@style/SpinnerAppTheme</item>
+    <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownItemAppTheme</item>
 
   </style>
 

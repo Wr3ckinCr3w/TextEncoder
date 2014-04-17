@@ -7,6 +7,8 @@
     <string name="to_text">To</string>
     <string name="copy_button">Copy</string>
     <string name="convert_button">Convert</string>
+    <string name="clear_all">Clear All</string>
+    <string name="rate_app">Rate App</string>
     <string name="input_prompt">Choose input type</string>
     <string name="target_prompt">Choose target type</string>
     <string-array name="types_array">

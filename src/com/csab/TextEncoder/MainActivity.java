@@ -1,19 +1,18 @@
 package com.csab.TextEncoder;
 
-import android.app.Activity;
 import android.text.ClipboardManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
 import org.apache.commons.codec.DecoderException;
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 
-@SuppressWarnings("deprecation")
-public class MainActivity extends Activity {
+public class MainActivity extends SherlockActivity {
 
     private ClipboardManager mClipboard;
     private Spinner mInputTypeSpinner, mTargetTypeSpinner;
@@ -27,7 +26,6 @@ public class MainActivity extends Activity {
 
 
     @Override
-    @SuppressWarnings("deprecation")
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
@@ -85,7 +83,8 @@ public class MainActivity extends Activity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_main, menu);
+        super.onCreateOptionsMenu(menu);
+        getSupportMenuInflater().inflate(R.menu.activity_main, menu);
         return true;
     }
 
@@ -97,9 +96,6 @@ public class MainActivity extends Activity {
                 mOutputEditText.setText("");
                 return true;
             case R.id.rate_app:
-                // TODO: fill in stub
-                return true;
-            case R.id.donate:
                 // TODO: fill in stub
                 return true;
             default:

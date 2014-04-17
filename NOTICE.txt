@@ -1,6 +1,10 @@
-This product includes software developed at
+This product includes software developed by
 The Apache Software Foundation (http://www.apache.org/).
 Google Inc. (https://code.google.com/)
+
+src/MainActivity.java
+Implements ActionBarSherlock library, Copyright 2012 Jake Wharton, http://actionbarsherlock.com
+Licensed under the Apache License, Version 2.0
 
 res/drawable
 Contains assets created with Android Asset Studio at http://j.mp/androidassetstudio
