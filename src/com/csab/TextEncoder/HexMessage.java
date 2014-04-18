@@ -6,25 +6,23 @@ import org.apache.commons.codec.binary.StringUtils;
 
 public class HexMessage extends Message {
 
+    private long[] longHexArray;
+
     public HexMessage(byte[] inputArray) {
         super(inputArray);
     }
 
     public HexMessage(String inputString) throws DecoderException, MessageConstructException {
+        inputString = inputString.replaceAll("\\s","");
         if (!isValid(inputString)) {
-            throw new MessageConstructException(Message.EXCEPTION_MESSAGE);
+            throw new MessageConstructException(Message.INVALID_INPUT_MESSAGE);
         }
         char[] charArray = inputString.toCharArray();
-        byte[] byteArray =  (byte[]) new Hex().decode(charArray);
-        setCharacterCodeArray(byteArray);
+        setCharacterCodeArray((byte[])new Hex().decode(charArray));
     }
 
     public HexMessage(long[] inputArray) {
-        byte[] byteArray = new byte[inputArray.length];
-        for (int i = 0; i < inputArray.length; i++) {
-            byteArray[i] = (byte) inputArray[i];
-        }
-        setCharacterCodeArray(byteArray);
+        longHexArray = inputArray;
     }
 
     public AsciiMessage toAsciiMessage() {
@@ -32,25 +30,33 @@ public class HexMessage extends Message {
     }
 
     public BinaryMessage toBinaryMessage() throws MessageConstructException {
-        return new BinaryMessage(getCharacterCodeArray());
+        return new BinaryMessage(longHexArray);
     }
 
     public DecimalMessage toDecimalMessage() {
-        return new DecimalMessage(getCharacterCodeArray());
+        return new DecimalMessage(longHexArray);
     }
 
     @Override
     public String toString() {
-        return StringUtils.newStringUsAscii(new Hex().encode(getCharacterCodeArray()));
+        if (getCharacterCodeArray() != null) {
+            return StringUtils.newStringUsAscii(new Hex().encode(getCharacterCodeArray()));
+        } else {
+            String result = "";
+            for (int i = 0; i < longHexArray.length; i++) {
+                result += Long.toHexString(longHexArray[i]);
+            }
+            return  result;
+        }
     }
 
     private boolean isValid(String inputString) {
-        inputString = inputString.replace(" ","");
         if (inputString.length() % 2 != 0) {
             return false;
         } else if (!org.apache.commons.lang3.StringUtils.isAlphanumeric(inputString)) {
             return false;
+        } else {
+            return true;
         }
-        return true;
     }
 }

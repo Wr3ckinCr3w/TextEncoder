@@ -1,17 +1,16 @@
 package com.csab.TextEncoder;
 
 import org.apache.commons.codec.binary.StringUtils;
-import java.util.Arrays;
 
 public class Message {
 
-    public static final String EXCEPTION_MESSAGE = "Invalid input format";
+    public static final String INVALID_INPUT_MESSAGE= "Invalid input format";
     private byte[] characterCodeArray;
 
     public Message() { }
 
     public Message(byte[] inputArray) {
-        characterCodeArray = Arrays.copyOf(inputArray, inputArray.length);
+        characterCodeArray = inputArray;
     }
 
     public Message(String inputString) {

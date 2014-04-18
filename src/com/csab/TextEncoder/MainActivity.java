@@ -135,7 +135,7 @@ public class MainActivity extends SherlockActivity {
                     break;
             }
         } catch (MessageConstructException | DecoderException e) {
-            Toast.makeText(getBaseContext(), Message.EXCEPTION_MESSAGE, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
         }
         // TODO: add Base64Message, OctalMessage
     }
@@ -175,24 +175,28 @@ public class MainActivity extends SherlockActivity {
                     break;
             }
         } catch (MessageConstructException e) {
-            Toast.makeText(getBaseContext(), Message.EXCEPTION_MESSAGE, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
     private void convertFromBinary(BinaryMessage message) {
-        switch ((int) mTargetTypeSpinner.getSelectedItemId()) {
-            case ASCII_ID:
-                AsciiMessage am = message.toAsciiMessage();
-                updateOutputTextBox(am.toString());
-                break;
-            case DECIMAL_ID:
-                DecimalMessage dm = message.toDecimalMessage();
-                updateOutputTextBox(dm.toString());
-                break;
-            case HEX_ID:
-                HexMessage hm = message.toHexMessage();
-                updateOutputTextBox(hm.toString());
-                break;
+        try {
+            switch ((int) mTargetTypeSpinner.getSelectedItemId()) {
+                case ASCII_ID:
+                    AsciiMessage am = message.toAsciiMessage();
+                    updateOutputTextBox(am.toString());
+                    break;
+                case DECIMAL_ID:
+                    DecimalMessage dm = message.toDecimalMessage();
+                    updateOutputTextBox(dm.toString());
+                    break;
+                case HEX_ID:
+                    HexMessage hm = message.toHexMessage();
+                    updateOutputTextBox(hm.toString());
+                    break;
+            }
+        } catch (MessageConstructException e) {
+            Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -213,7 +217,7 @@ public class MainActivity extends SherlockActivity {
                     break;
             }
         } catch (MessageConstructException e) {
-            Toast.makeText(getBaseContext(), Message.EXCEPTION_MESSAGE, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -234,7 +238,7 @@ public class MainActivity extends SherlockActivity {
                     break;
             }
         } catch (MessageConstructException e) {
-            Toast.makeText(getBaseContext(), Message.EXCEPTION_MESSAGE, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 }
