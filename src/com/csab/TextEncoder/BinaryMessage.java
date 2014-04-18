@@ -36,15 +36,15 @@ public class BinaryMessage extends Message {
     }
 
     public DecimalMessage toDecimalMessage() {
-        for (int i = 0; i < longBinaryArray.length; i++) {
-            String temp= String.valueOf(longBinaryArray[i]);
-            longBinaryArray[i] = Long.parseLong(temp, 2);
-        }
         return new DecimalMessage(longBinaryArray);
     }
 
     public HexMessage toHexMessage() {
         return new HexMessage(longBinaryArray);
+    }
+
+    public OctalMessage toOctalMessage() {
+        return new OctalMessage(longBinaryArray);
     }
 
     @Override

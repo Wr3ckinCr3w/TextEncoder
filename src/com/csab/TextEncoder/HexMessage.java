@@ -37,6 +37,10 @@ public class HexMessage extends Message {
         return new DecimalMessage(longHexArray);
     }
 
+    public OctalMessage toOctalMessage() {
+        return new OctalMessage(longHexArray);
+    }
+
     @Override
     public String toString() {
         if (getCharacterCodeArray() != null) {

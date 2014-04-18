@@ -23,9 +23,11 @@ public class MainActivity extends SherlockActivity {
     private static final String DEFAULT_TARGET_TYPE = "Binary";
     private static final String EQUAL_TYPES_MESSAGE = "Input / output types are the same";
     private static final int ASCII_ID = 0;
-    private static final int DECIMAL_ID = 1;
-    private static final int HEX_ID = 2;
-    private static final int BINARY_ID = 3;
+    private static final int BINARY_ID = 1;
+    private static final int DECIMAL_ID = 2;
+    private static final int HEX_ID = 3;
+    private static final int BASE64_ID = 4;
+    private static final int OCTAL_ID = 5;
 
 
     @Override
@@ -125,6 +127,10 @@ public class MainActivity extends SherlockActivity {
                     message = new BinaryMessage(mInputTextString);
                     convertFromBinary((BinaryMessage) message);
                     break;
+                case BASE64_ID:
+                    message = new Base64Message(mInputTextString);
+                    convertFromBase64((Base64Message) message);
+                    break;
                 case DECIMAL_ID:
                     message = new DecimalMessage(mInputTextString);
                     convertFromDecimal((DecimalMessage) message);
@@ -133,11 +139,14 @@ public class MainActivity extends SherlockActivity {
                     message = new HexMessage(mInputTextString);
                     convertFromHex((HexMessage) message);
                     break;
+                case OCTAL_ID:
+                    message = new OctalMessage(mInputTextString);
+                    convertFromOctal((OctalMessage) message);
+                    break;
             }
         } catch (MessageConstructException | DecoderException e) {
             Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
         }
-        // TODO: add Base64Message, OctalMessage
     }
 
     private boolean selectedTypesAreEqual() {
@@ -173,6 +182,35 @@ public class MainActivity extends SherlockActivity {
                     HexMessage hm = message.toHexMessage();
                     updateOutputTextBox(hm.toString());
                     break;
+                case OCTAL_ID:
+                    OctalMessage om = message.toOctalMessage();
+                    updateOutputTextBox(om.toString());
+                    break;
+            }
+        } catch (MessageConstructException e) {
+            Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void convertFromBase64(Base64Message message) {
+        try {
+            switch ((int) mTargetTypeSpinner.getSelectedItemId()) {
+                case ASCII_ID:
+                    AsciiMessage am = message.toAsciiMessage();
+                    updateOutputTextBox(am.toString());
+                    break;
+                case BINARY_ID:
+                    BinaryMessage bm = message.toBinaryMessage();
+                    updateOutputTextBox(bm.toString());
+                    break;
+                case DECIMAL_ID:
+                    DecimalMessage dm = message.toDecimalMessage();
+                    updateOutputTextBox(dm.toString());
+                    break;
+                case HEX_ID:
+                    HexMessage hm = message.toHexMessage();
+                    updateOutputTextBox(hm.toString());
+                    break;
             }
         } catch (MessageConstructException e) {
             Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -193,6 +231,10 @@ public class MainActivity extends SherlockActivity {
                 case HEX_ID:
                     HexMessage hm = message.toHexMessage();
                     updateOutputTextBox(hm.toString());
+                    break;
+                case OCTAL_ID:
+                    OctalMessage om = message.toOctalMessage();
+                    updateOutputTextBox(om.toString());
                     break;
             }
         } catch (MessageConstructException e) {
@@ -215,6 +257,10 @@ public class MainActivity extends SherlockActivity {
                     HexMessage hm = message.toHexMessage();
                     updateOutputTextBox(hm.toString());
                     break;
+                case OCTAL_ID:
+                    OctalMessage om = message.toOctalMesage();
+                    updateOutputTextBox(om.toString());
+                    break;
             }
         } catch (MessageConstructException e) {
             Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -235,6 +281,39 @@ public class MainActivity extends SherlockActivity {
                 case DECIMAL_ID:
                     DecimalMessage dm = message.toDecimalMessage();
                     updateOutputTextBox(dm.toString());
+                    break;
+                case OCTAL_ID:
+                    OctalMessage om = message.toOctalMessage();
+                    updateOutputTextBox(om.toString());
+                    break;
+            }
+        } catch (MessageConstructException e) {
+            Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void convertFromOctal(OctalMessage message) {
+        try {
+            switch ((int) mTargetTypeSpinner.getSelectedItemId()) {
+                case ASCII_ID:
+                    AsciiMessage am = message.toAsciiMessage();
+                    updateOutputTextBox(am.toString());
+                    break;
+                case BASE64_ID:
+                    Base64Message b64m = message.toBase64Message();
+                    updateOutputTextBox(b64m.toString());
+                    break;
+                case BINARY_ID:
+                    BinaryMessage bm = message.toBinaryMessage();
+                    updateOutputTextBox(bm.toString());
+                    break;
+                case DECIMAL_ID:
+                    DecimalMessage dm = message.toDecimalMessage();
+                    updateOutputTextBox(dm.toString());
+                    break;
+                case HEX_ID:
+                    HexMessage hm = message.toHexMessage();
+                    updateOutputTextBox(hm.toString());
                     break;
             }
         } catch (MessageConstructException e) {

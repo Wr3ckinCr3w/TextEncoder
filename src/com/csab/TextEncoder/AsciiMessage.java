@@ -41,6 +41,10 @@ public class AsciiMessage extends Message {
         return new HexMessage(getCharacterCodeArray());
     }
 
+    public OctalMessage toOctalMessage() {
+        return new OctalMessage(getCharacterCodeArray());
+    }
+
     @Override
     public String toString() {
         return StringUtils.newStringUsAscii(getCharacterCodeArray());

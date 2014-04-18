@@ -11,7 +11,7 @@ public class DecimalMessage extends Message {
         super(inputArray);
         longDecimalArray = new long[inputArray.length];
         for (int i = 0; i < longDecimalArray.length; i++) {
-            longDecimalArray[i] = Long.parseLong(Long.toBinaryString((long) inputArray[i]), 2);
+            longDecimalArray[i] = Long.parseLong(String.valueOf(inputArray[i]));
         }
     }
 
@@ -36,7 +36,6 @@ public class DecimalMessage extends Message {
         } else {
             return new AsciiMessage(longDecimalArray);
         }
-
     }
 
     public BinaryMessage toBinaryMessage() {
@@ -45,6 +44,10 @@ public class DecimalMessage extends Message {
 
     public HexMessage toHexMessage() {
         return new HexMessage(longDecimalArray);
+    }
+
+    public OctalMessage toOctalMesage() {
+        return new OctalMessage(longDecimalArray);
     }
 
     @Override

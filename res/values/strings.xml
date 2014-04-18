@@ -13,8 +13,10 @@
     <string name="target_prompt">Choose target type</string>
     <string-array name="types_array">
         <item>ASCII</item>
+        <item>Binary</item>
         <item>Decimal</item>
         <item>Hex</item>
-        <item>Binary</item>
+        <item>Base64</item>
+        <item>Octal</item>
     </string-array>
 </resources>
