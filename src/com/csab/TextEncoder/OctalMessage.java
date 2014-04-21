@@ -1,7 +1,6 @@
 package com.csab.TextEncoder;
 
 import java.util.Arrays;
-import org.apache.commons.lang3.StringUtils;
 
 public class OctalMessage extends Message {
 
@@ -11,7 +10,7 @@ public class OctalMessage extends Message {
         super(inputArray);
         longOctalArray = new long[inputArray.length];
         for (int i = 0; i < longOctalArray.length; i++) {
-            longOctalArray[i] = Long.parseLong(calcOctalForm(longOctalArray[i]));
+            longOctalArray[i] = calcOctalValue((long)inputArray[i]);
         }
     }
 
@@ -22,14 +21,15 @@ public class OctalMessage extends Message {
         String[] stringArray = inputString.split("\\s+");
         longOctalArray = new long[stringArray.length];
         for (int i = 0; i < stringArray.length; i++) {
-            longOctalArray[i] = Long.parseLong(calcOctalForm(Long.parseLong(stringArray[i])));
+            longOctalArray[i] =
+                    calcOctalValue(Long.parseLong(stringArray[i]));
         }
     }
 
     public OctalMessage(long[] inputArray) {
         longOctalArray = inputArray;
         for (int i = 0; i < longOctalArray.length; i++) {
-            longOctalArray[i] = Long.parseLong(calcOctalForm(longOctalArray[i]));
+            longOctalArray[i] = calcOctalValue(longOctalArray[i]);
         }
     }
 
@@ -42,7 +42,7 @@ public class OctalMessage extends Message {
     }
 
     public Base64Message toBase64Message() {
-        return new Base64Message(longOctalArray);
+        return new Base64Message(calcDecimalArray(longOctalArray));
     }
 
     public BinaryMessage toBinaryMessage() {
@@ -57,22 +57,34 @@ public class OctalMessage extends Message {
         return new HexMessage(longOctalArray);
     }
 
-    private String calcOctalForm(long value) {
+    private long calcOctalValue(long value) {
         String result = "";
         while (value > 0) {
             long rem = value % 8;
             value /= 8;
             result = rem + result;
         }
-        return result;
+        return Long.parseLong(result);
+    }
+
+    private long[] calcDecimalArray(long[] array) {
+        for (int i = 0; i < array.length; i++) {
+            String[] digits = String.valueOf(array[i]).split("(?!^)");
+            long result = 0;
+            for (int j = 0; j < digits.length; j++) {
+                result +=  Long.parseLong(digits[j]) * Math.pow(8, digits.length-j-1);
+            }
+            array[i] = result;
+        }
+        return array;
     }
 
     @Override
     public String toString() {
-        return Arrays.toString(longOctalArray).replaceAll("[^0-9\\s]", "");
+        return Arrays.toString(longOctalArray).replaceAll("[^0-7\\s]","");
     }
 
     private boolean isValid(String inputString) {
-        return StringUtils.isNumeric(inputString.replaceAll("\\s",""));
+        return inputString.matches("^[0-7]+$");
     }
 }

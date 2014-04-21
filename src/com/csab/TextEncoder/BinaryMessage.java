@@ -1,26 +1,26 @@
 package com.csab.TextEncoder;
 
+import java.math.BigInteger;
+
 public class BinaryMessage extends Message {
 
     private long[] longBinaryArray;
     private static final int NUMBER_OF_BITS = 8;
 
-    public BinaryMessage(byte[] inputArray) throws MessageConstructException {
+    public BinaryMessage(byte[] inputArray) {
         super(inputArray);
         longBinaryArray = new long[inputArray.length];
         for (int i = 0; i < longBinaryArray.length; i++) {
-            longBinaryArray[i] = Long.parseLong(Long.toBinaryString((long) inputArray[i]), 2);
+            longBinaryArray[i] = (long) inputArray[i];
         }
     }
 
     public BinaryMessage(String inputString) throws MessageConstructException {
-        if (!isValid(inputString.replaceAll("\\s", ""))) {
-            throw new MessageConstructException(Message.INVALID_INPUT_MESSAGE);
-        }
-        String[] stringArrayOfBytes = inputString.split("\\s+");
-        longBinaryArray = new long[stringArrayOfBytes.length];
+        String[] stringArray = inputString.split("\\s+");
+        isValid(stringArray);
+        longBinaryArray = new long[stringArray.length];
         for (int i = 0; i < longBinaryArray.length; i++) {
-            longBinaryArray[i] = Long.parseLong(stringArrayOfBytes[i], 2);
+            longBinaryArray[i] = Long.parseLong(stringArray[i], 2);
         }
     }
 
@@ -37,6 +37,10 @@ public class BinaryMessage extends Message {
 
     public DecimalMessage toDecimalMessage() {
         return new DecimalMessage(longBinaryArray);
+    }
+
+    public Base64Message toBase64Message() {
+        return new Base64Message(longBinaryArray);
     }
 
     public HexMessage toHexMessage() {
@@ -65,14 +69,15 @@ public class BinaryMessage extends Message {
         return result;
     }
 
-    private boolean isValid(String inputString) {
-        for (char ch : inputString.toCharArray()) {
-            if (ch == '1'  || ch == '0') {
-                continue;
-            } else {
-                return false;
+    private boolean isValid(String[] array) throws MessageConstructException {
+        for (String s : array) {
+            if (!s.matches("^[01]+$")) {
+                throw new MessageConstructException(Message.INVALID_INPUT_MESSAGE);
+            } else if (new BigInteger(s).longValue() >= Long.MAX_VALUE) {
+                throw new MessageConstructException("Number input too large");
             }
         }
         return true;
     }
+
 }

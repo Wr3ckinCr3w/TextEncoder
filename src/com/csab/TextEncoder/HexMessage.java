@@ -12,13 +12,13 @@ public class HexMessage extends Message {
         super(inputArray);
     }
 
-    public HexMessage(String inputString) throws DecoderException, MessageConstructException {
-        inputString = inputString.replaceAll("\\s","");
-        if (!isValid(inputString)) {
-            throw new MessageConstructException(Message.INVALID_INPUT_MESSAGE);
+    public HexMessage(String inputString) throws DecoderException {
+        inputString = inputString.replaceAll("\\s", "");
+        setCharacterCodeArray(new Hex().decode(inputString.getBytes()));
+        longHexArray = new long[getCharacterCodeArray().length];
+        for (int i = 0; i < longHexArray.length; i++) {
+            longHexArray[i] = (long) getCharacterCodeArray()[i];
         }
-        char[] charArray = inputString.toCharArray();
-        setCharacterCodeArray((byte[])new Hex().decode(charArray));
     }
 
     public HexMessage(long[] inputArray) {
@@ -29,8 +29,12 @@ public class HexMessage extends Message {
         return new AsciiMessage(getCharacterCodeArray());
     }
 
+    public Base64Message toBase64Message() throws MessageConstructException {
+        return new Base64Message(getCharacterCodeArray());
+    }
+
     public BinaryMessage toBinaryMessage() throws MessageConstructException {
-        return new BinaryMessage(longHexArray);
+        return new BinaryMessage(getCharacterCodeArray());
     }
 
     public DecimalMessage toDecimalMessage() {
@@ -51,16 +55,6 @@ public class HexMessage extends Message {
                 result += Long.toHexString(longHexArray[i]);
             }
             return  result;
-        }
-    }
-
-    private boolean isValid(String inputString) {
-        if (inputString.length() % 2 != 0) {
-            return false;
-        } else if (!org.apache.commons.lang3.StringUtils.isAlphanumeric(inputString)) {
-            return false;
-        } else {
-            return true;
         }
     }
 }

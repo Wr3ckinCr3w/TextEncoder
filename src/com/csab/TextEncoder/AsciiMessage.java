@@ -29,11 +29,15 @@ public class AsciiMessage extends Message {
         }
     }
 
+    public Base64Message toBase64Message()  {
+        return new Base64Message(getCharacterCodeArray());
+    }
+
     public BinaryMessage toBinaryMessage() throws MessageConstructException {
         return new BinaryMessage(getCharacterCodeArray());
     }
 
-    public DecimalMessage toDecimalMessage() {
+    public DecimalMessage toDecimalMessage() throws MessageConstructException {
         return new DecimalMessage(getCharacterCodeArray());
     }
 

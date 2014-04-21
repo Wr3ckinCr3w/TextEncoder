@@ -1,7 +1,8 @@
 package com.csab.TextEncoder;
 
-import java.util.Arrays;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.binary.StringUtils;
+import android.util.Base64;
 
 public class Base64Message extends Message {
 
@@ -9,58 +10,51 @@ public class Base64Message extends Message {
 
     public Base64Message(byte[] inputArray) {
         super(inputArray);
-        longBase64Array = new long[inputArray.length];
-        for (int i = 0; i < longBase64Array.length; i++) {
-            longBase64Array[i] = Long.parseLong(Long.toBinaryString((long) inputArray[i]), 8);
-        }
     }
 
-    public Base64Message(String inputString) throws MessageConstructException {
-        if (!isValid(inputString)) {
-            throw new MessageConstructException(Message.INVALID_INPUT_MESSAGE);
-        }
-        String[] stringArray = inputString.split("\\s+");
-        longBase64Array = new long[stringArray.length];
-        for (int i = 0; i < stringArray.length; i++) {
-            longBase64Array[i] = Long.parseLong(stringArray[i], 8);
-        }
+    public Base64Message(String inputString) throws DecoderException {
+        setCharacterCodeArray(Base64.decode(inputString, Base64.DEFAULT));
     }
 
     public Base64Message(long[] inputArray) {
         longBase64Array = inputArray;
     }
 
-    public AsciiMessage toAsciiMessage() throws MessageConstructException {
-        if (getCharacterCodeArray() != null) {
-            return new AsciiMessage(getCharacterCodeArray());
-        } else {
-            return new AsciiMessage(longBase64Array);
-        }
+    public AsciiMessage toAsciiMessage() {
+        return new AsciiMessage(getCharacterCodeArray());
     }
 
     public BinaryMessage toBinaryMessage() {
-        return new BinaryMessage(longBase64Array);
+        return new BinaryMessage(getCharacterCodeArray());
     }
 
-    public DecimalMessage toDecimalMessage() {
-        return new DecimalMessage(longBase64Array);
+    public DecimalMessage toDecimalMessage() throws MessageConstructException {
+        return new DecimalMessage(getCharacterCodeArray());
     }
 
     public HexMessage toHexMessage() {
-        return new HexMessage(longBase64Array);
+        return new HexMessage(getCharacterCodeArray());
     }
 
     public OctalMessage toOctalMessage() {
-        return new OctalMessage(longBase64Array);
+        return new OctalMessage(getCharacterCodeArray());
     }
 
     @Override
     public String toString() {
-        return Arrays.toString(longBase64Array).replaceAll("[^0-9\\s]", "");
+        if (getCharacterCodeArray() != null) {
+            return StringUtils.newStringUsAscii(Base64.encode(getCharacterCodeArray(), Base64.DEFAULT));
+        } else {
+            String result = "";
+            for (int i = 0; i < longBase64Array.length; i++) {
+                result += StringUtils.newStringUsAscii(
+                        Base64.encode(String.valueOf(longBase64Array[i]).getBytes(), Base64.NO_WRAP));
+                if (i != longBase64Array.length - 1)
+                    result += " ";
+            }
+            return result;
+        }
     }
 
-    private boolean isValid(String inputString) {
-        return StringUtils.isNumeric(inputString.replaceAll("\\s", ""));
-    }
 
 }

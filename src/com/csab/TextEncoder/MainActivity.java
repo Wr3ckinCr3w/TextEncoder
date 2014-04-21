@@ -26,8 +26,8 @@ public class MainActivity extends SherlockActivity {
     private static final int BINARY_ID = 1;
     private static final int DECIMAL_ID = 2;
     private static final int HEX_ID = 3;
-    private static final int BASE64_ID = 4;
-    private static final int OCTAL_ID = 5;
+    private static final int OCTAL_ID = 4;
+    private static final int BASE64_ID = 5;
 
 
     @Override
@@ -123,13 +123,13 @@ public class MainActivity extends SherlockActivity {
                     message = new AsciiMessage(mInputTextString);
                     convertFromAscii((AsciiMessage)message);
                     break;
-                case BINARY_ID:
-                    message = new BinaryMessage(mInputTextString);
-                    convertFromBinary((BinaryMessage) message);
-                    break;
                 case BASE64_ID:
                     message = new Base64Message(mInputTextString);
                     convertFromBase64((Base64Message) message);
+                    break;
+                case BINARY_ID:
+                    message = new BinaryMessage(mInputTextString);
+                    convertFromBinary((BinaryMessage) message);
                     break;
                 case DECIMAL_ID:
                     message = new DecimalMessage(mInputTextString);
@@ -159,7 +159,8 @@ public class MainActivity extends SherlockActivity {
         try {
             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
         } catch (android.content.ActivityNotFoundException anfe) {
-            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + appPackageName)));
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" +
+                    appPackageName)));
         }
     }
 
@@ -170,6 +171,10 @@ public class MainActivity extends SherlockActivity {
     private void convertFromAscii(AsciiMessage message) {
         try {
             switch ((int) mTargetTypeSpinner.getSelectedItemId()) {
+                case BASE64_ID:
+                    Base64Message b64m = message.toBase64Message();
+                    updateOutputTextBox(b64m.toString());
+                    break;
                 case BINARY_ID:
                     BinaryMessage bm = message.toBinaryMessage();
                     updateOutputTextBox(bm.toString());
@@ -211,6 +216,10 @@ public class MainActivity extends SherlockActivity {
                     HexMessage hm = message.toHexMessage();
                     updateOutputTextBox(hm.toString());
                     break;
+                case OCTAL_ID:
+                    OctalMessage om = message.toOctalMessage();
+                    updateOutputTextBox(om.toString());
+                    break;
             }
         } catch (MessageConstructException e) {
             Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -223,6 +232,10 @@ public class MainActivity extends SherlockActivity {
                 case ASCII_ID:
                     AsciiMessage am = message.toAsciiMessage();
                     updateOutputTextBox(am.toString());
+                    break;
+                case BASE64_ID:
+                    Base64Message b64m = message.toBase64Message();
+                    updateOutputTextBox(b64m.toString());
                     break;
                 case DECIMAL_ID:
                     DecimalMessage dm = message.toDecimalMessage();
@@ -249,6 +262,10 @@ public class MainActivity extends SherlockActivity {
                     AsciiMessage am = message.toAsciiMessage();
                     updateOutputTextBox(am.toString());
                     break;
+                case BASE64_ID:
+                    Base64Message b64m = message.toBase64Message();
+                    updateOutputTextBox(b64m.toString());
+                    break;
                 case BINARY_ID:
                     BinaryMessage bm = message.toBinaryMessage();
                     updateOutputTextBox(bm.toString());
@@ -273,6 +290,10 @@ public class MainActivity extends SherlockActivity {
                 case ASCII_ID:
                     AsciiMessage am = message.toAsciiMessage();
                     updateOutputTextBox(am.toString());
+                    break;
+                case BASE64_ID:
+                    Base64Message b64m = message.toBase64Message();
+                    updateOutputTextBox(b64m.toString());
                     break;
                 case BINARY_ID:
                     BinaryMessage bm = message.toBinaryMessage();
