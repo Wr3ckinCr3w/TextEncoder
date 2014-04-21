@@ -14,11 +14,9 @@ public class OctalMessage extends Message {
         }
     }
 
-    public OctalMessage(String inputString) throws MessageConstructException {
-        if (!isValid(inputString)) {
-            throw new MessageConstructException(Message.INVALID_INPUT_MESSAGE);
-        }
+    public OctalMessage(String inputString) throws NumberFormatException, MessageConstructException {
         String[] stringArray = inputString.split("\\s+");
+        checkValid(stringArray);
         longOctalArray = new long[stringArray.length];
         for (int i = 0; i < stringArray.length; i++) {
             longOctalArray[i] =
@@ -26,7 +24,7 @@ public class OctalMessage extends Message {
         }
     }
 
-    public OctalMessage(long[] inputArray) {
+    public OctalMessage(long[] inputArray) throws NumberFormatException {
         longOctalArray = inputArray;
         for (int i = 0; i < longOctalArray.length; i++) {
             longOctalArray[i] = calcOctalValue(longOctalArray[i]);
@@ -84,7 +82,11 @@ public class OctalMessage extends Message {
         return Arrays.toString(longOctalArray).replaceAll("[^0-7\\s]","");
     }
 
-    private boolean isValid(String inputString) {
-        return inputString.matches("^[0-7]+$");
+    private boolean checkValid(String[] array) throws MessageConstructException {
+        for (String s: array) {
+            if (!s.matches("^[0-7]+$"))
+                throw new MessageConstructException(MessageConstructException.INVALID_INPUT_MESSAGE);
+        }
+        return true;
     }
 }

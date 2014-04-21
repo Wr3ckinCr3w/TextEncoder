@@ -1,7 +1,5 @@
 package com.csab.TextEncoder;
 
-import java.math.BigInteger;
-
 public class BinaryMessage extends Message {
 
     private long[] longBinaryArray;
@@ -15,9 +13,9 @@ public class BinaryMessage extends Message {
         }
     }
 
-    public BinaryMessage(String inputString) throws MessageConstructException {
+    public BinaryMessage(String inputString) throws MessageConstructException, NumberFormatException {
         String[] stringArray = inputString.split("\\s+");
-        isValid(stringArray);
+        checkValid(stringArray);
         longBinaryArray = new long[stringArray.length];
         for (int i = 0; i < longBinaryArray.length; i++) {
             longBinaryArray[i] = Long.parseLong(stringArray[i], 2);
@@ -69,12 +67,10 @@ public class BinaryMessage extends Message {
         return result;
     }
 
-    private boolean isValid(String[] array) throws MessageConstructException {
+    private boolean checkValid(String[] array) throws MessageConstructException {
         for (String s : array) {
             if (!s.matches("^[01]+$")) {
-                throw new MessageConstructException(Message.INVALID_INPUT_MESSAGE);
-            } else if (new BigInteger(s).longValue() >= Long.MAX_VALUE) {
-                throw new MessageConstructException("Number input too large");
+                throw new MessageConstructException(MessageConstructException.INVALID_INPUT_MESSAGE);
             }
         }
         return true;

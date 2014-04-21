@@ -12,8 +12,8 @@ public class HexMessage extends Message {
         super(inputArray);
     }
 
+    // TODO: Fix hexadecimal parsing / conversions
     public HexMessage(String inputString) throws DecoderException {
-        inputString = inputString.replaceAll("\\s", "");
         setCharacterCodeArray(new Hex().decode(inputString.getBytes()));
         longHexArray = new long[getCharacterCodeArray().length];
         for (int i = 0; i < longHexArray.length; i++) {
@@ -37,12 +37,12 @@ public class HexMessage extends Message {
         return new BinaryMessage(getCharacterCodeArray());
     }
 
-    public DecimalMessage toDecimalMessage() {
-        return new DecimalMessage(longHexArray);
+    public DecimalMessage toDecimalMessage() throws MessageConstructException {
+        return new DecimalMessage(getCharacterCodeArray());
     }
 
-    public OctalMessage toOctalMessage() {
-        return new OctalMessage(longHexArray);
+    public OctalMessage toOctalMessage() throws MessageConstructException {
+        return new OctalMessage(getCharacterCodeArray());
     }
 
     @Override

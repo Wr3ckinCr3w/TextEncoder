@@ -115,6 +115,7 @@ public class MainActivity extends SherlockActivity {
             return;
         }
 
+        // TODO: Implement reflection to call conversion methods at runtime
         Message message;
         // Construct appropriate message type, call encoding method
         try {
@@ -144,7 +145,7 @@ public class MainActivity extends SherlockActivity {
                     convertFromOctal((OctalMessage) message);
                     break;
             }
-        } catch (MessageConstructException | DecoderException e) {
+        } catch (MessageConstructException | NumberFormatException | DecoderException e) {
             Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
