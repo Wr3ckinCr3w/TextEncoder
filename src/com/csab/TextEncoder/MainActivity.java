@@ -52,6 +52,9 @@ public class MainActivity extends SherlockActivity {
         mTargetTypeSpinner.setAdapter(dataAdapter);
         mTargetTypeSpinner.setSelection(dataAdapter.getPosition(DEFAULT_TARGET_TYPE));
 
+        // Load HexMessage HashMaps
+        loadHashMaps();
+
         // Add TextChanged listener
         mInputEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -341,6 +344,24 @@ public class MainActivity extends SherlockActivity {
         } catch (MessageConstructException e) {
             Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void loadHashMaps() {
+        // Load first map
+        HexMessage.mapLongString.put(10L, "A");
+        HexMessage.mapLongString.put(11L, "B");
+        HexMessage.mapLongString.put(12L, "C");
+        HexMessage.mapLongString.put(13L, "D");
+        HexMessage.mapLongString.put(14L, "E");
+        HexMessage.mapLongString.put(15L, "F");
+        // Load second map
+        HexMessage.mapStringLong.put("A", 10L);
+        HexMessage.mapStringLong.put("B", 11L);
+        HexMessage.mapStringLong.put("C", 12L);
+        HexMessage.mapStringLong.put("D", 13L);
+        HexMessage.mapStringLong.put("E", 14L);
+        HexMessage.mapStringLong.put("F", 15L);
+
     }
 }
 
