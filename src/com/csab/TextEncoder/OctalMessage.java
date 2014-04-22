@@ -1,7 +1,5 @@
 package com.csab.TextEncoder;
 
-import java.util.Arrays;
-
 public class OctalMessage extends Message {
 
     private long[] longOctalArray;
@@ -10,37 +8,29 @@ public class OctalMessage extends Message {
         super(inputArray);
         longOctalArray = new long[inputArray.length];
         for (int i = 0; i < longOctalArray.length; i++) {
-            longOctalArray[i] = calcOctalValue((long)inputArray[i]);
+            longOctalArray[i] = (long)inputArray[i];
         }
     }
 
     public OctalMessage(String inputString) throws NumberFormatException, MessageConstructException {
         String[] stringArray = inputString.split("\\s+");
         checkValid(stringArray);
-        longOctalArray = new long[stringArray.length];
         for (int i = 0; i < stringArray.length; i++) {
-            longOctalArray[i] =
-                    calcOctalValue(Long.parseLong(stringArray[i]));
+            longOctalArray[i] = Long.parseLong(stringArray[i]);
         }
+        longOctalArray = calcDecimalArray(longOctalArray);
     }
 
     public OctalMessage(long[] inputArray) throws NumberFormatException {
         longOctalArray = inputArray;
-        for (int i = 0; i < longOctalArray.length; i++) {
-            longOctalArray[i] = calcOctalValue(longOctalArray[i]);
-        }
     }
 
     public AsciiMessage toAsciiMessage() throws MessageConstructException {
-        if (getCharacterCodeArray() != null) {
-            return new AsciiMessage(getCharacterCodeArray());
-        } else {
-            return new AsciiMessage(longOctalArray);
-        }
+        return new AsciiMessage(longOctalArray);
     }
 
     public Base64Message toBase64Message() {
-        return new Base64Message(calcDecimalArray(longOctalArray));
+        return new Base64Message(longOctalArray);
     }
 
     public BinaryMessage toBinaryMessage() {
@@ -79,7 +69,13 @@ public class OctalMessage extends Message {
 
     @Override
     public String toString() {
-        return Arrays.toString(longOctalArray).replaceAll("[^0-7\\s]","");
+        String result = "";
+        for (int i = 0; i < longOctalArray.length; i++) {
+            result += calcOctalValue(longOctalArray[i]);
+            if (i != longOctalArray.length - 1)
+                result += " ";
+        }
+        return result;
     }
 
     private boolean checkValid(String[] array) throws MessageConstructException {

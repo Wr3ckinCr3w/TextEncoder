@@ -12,6 +12,10 @@ public class HexMessage extends Message {
 
     public HexMessage(byte[] inputArray) {
         super(inputArray);
+        longHexArray = new long[inputArray.length];
+        for (int i = 0; i < inputArray.length; i++) {
+            longHexArray[i] = (long)inputArray[i];
+        }
     }
 
     public HexMessage(String inputString) throws DecoderException, MessageConstructException {
