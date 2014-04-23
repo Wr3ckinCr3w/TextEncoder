@@ -5,12 +5,11 @@ import android.content.Context;
 
 public class DecimalMessage extends Message {
 
-    public DecimalMessage(byte[] inputArray) throws MessageConstructException {
+    public DecimalMessage(byte[] inputArray) throws NumberFormatException {
         super(inputArray);
     }
 
-    public DecimalMessage(String inputString, Context context) throws MessageConstructException,
-            NumberFormatException {
+    public DecimalMessage(String inputString, Context context) throws NumberFormatException {
         super(inputString, context);
         checkValid(getStringValuesArray());
         long[] tempArray = new long[getStringValuesArray().length];
@@ -29,10 +28,10 @@ public class DecimalMessage extends Message {
         return Arrays.toString(getLongValuesArray()).replaceAll("[^0-9\\s]","");
     }
 
-    private boolean checkValid(String[] array) throws MessageConstructException {
+    private boolean checkValid(String[] array) throws NumberFormatException {
         for (String s : array) {
             if (!s.matches("^[0-9]+$")) {
-                throw new MessageConstructException(
+                throw new NumberFormatException(
                         getContext().getResources().getString(R.string.invalid_input_message));
             }
         }
