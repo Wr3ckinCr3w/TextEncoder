@@ -10,8 +10,7 @@ public class BinaryMessage extends Message {
         super(inputArray);
     }
 
-    public BinaryMessage(String inputString, Context context) throws MessageConstructException,
-            NumberFormatException {
+    public BinaryMessage(String inputString, Context context) throws NumberFormatException {
         super(inputString, context);
         checkValid(getStringValuesArray());
         long[] tempArray = new long[getStringValuesArray().length];
@@ -43,10 +42,10 @@ public class BinaryMessage extends Message {
         return result;
     }
 
-    private boolean checkValid(String[] array) throws MessageConstructException {
+    private boolean checkValid(String[] array) throws NumberFormatException {
         for (String s : array) {
             if (!s.matches("^[01]+$")) {
-                throw new MessageConstructException(
+                throw new NumberFormatException(
                         getContext().getResources().getString(R.string.invalid_input_message));
             }
         }

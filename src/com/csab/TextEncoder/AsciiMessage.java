@@ -14,12 +14,12 @@ public class AsciiMessage extends Message {
         setByteValuesArray(inputString.getBytes());
     }
 
-    public AsciiMessage(long[] inputArray) throws MessageConstructException {
+    public AsciiMessage(long[] inputArray) throws NumberFormatException {
         long[] sortedArray = Arrays.copyOf(inputArray, inputArray.length);
         Arrays.sort(sortedArray);
         if (sortedArray[sortedArray.length - 1] > Byte.MAX_VALUE) {
             // TODO: Get a context to access this message from strings.xml
-            throw new MessageConstructException("Value outside ASCII code range (127)");
+            throw new NumberFormatException("Value outside ASCII code range (127)");
         } else {
             byte[] byteArray = new byte[inputArray.length];
             for (int i = 0; i < inputArray.length; i++) {

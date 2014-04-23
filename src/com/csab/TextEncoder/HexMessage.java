@@ -15,7 +15,7 @@ public class HexMessage extends Message {
     }
 
     public HexMessage(String inputString, Context context) throws DecoderException,
-            MessageConstructException {
+            NumberFormatException {
         super(inputString.toUpperCase(), context);
         checkValid(getStringValuesArray());
         long[] tempArray = calcDecimalArray(getStringValuesArray());
@@ -68,10 +68,10 @@ public class HexMessage extends Message {
         return result;
     }
 
-    public boolean checkValid(String[] array) throws MessageConstructException {
+    public boolean checkValid(String[] array) throws NumberFormatException {
         for (String s: array) {
             if(!s.matches("^[A-F0-9]+$"))
-                throw new MessageConstructException(
+                throw new NumberFormatException(
                         getContext().getResources().getString(R.string.invalid_input_message));
         }
         return true;

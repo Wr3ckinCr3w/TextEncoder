@@ -8,8 +8,7 @@ public class OctalMessage extends Message {
         super(inputArray);
     }
 
-    public OctalMessage(String inputString, Context context) throws NumberFormatException,
-            MessageConstructException {
+    public OctalMessage(String inputString, Context context) throws NumberFormatException {
         super(inputString, context);
         checkValid(getStringValuesArray());
         long[] tempArray = new long[getStringValuesArray().length];
@@ -57,10 +56,10 @@ public class OctalMessage extends Message {
         return result;
     }
 
-    private boolean checkValid(String[] array) throws MessageConstructException {
+    private boolean checkValid(String[] array) throws NumberFormatException {
         for (String s: array) {
             if (!s.matches("^[0-7]+$"))
-                throw new MessageConstructException(
+                throw new NumberFormatException(
                         getContext().getResources().getString(R.string.invalid_input_message));
         }
         return true;
