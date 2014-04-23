@@ -14,7 +14,7 @@ public class HexMessage extends Message {
     }
 
     public HexMessage(String inputString) throws DecoderException, MessageConstructException {
-        super(inputString);
+        super(inputString.toUpperCase());
         checkValid(getStringValuesArray());
         long[] tempArray = calcDecimalArray(getStringValuesArray());
         setLongValuesArray(tempArray);
