@@ -6,51 +6,45 @@ import java.util.HashMap;
 
 public class HexMessage extends Message {
 
-    private long[] longHexArray;
-    public static Map<Long, String> mapLongString= new HashMap<>();
-    public static Map<String, Long> mapStringLong= new HashMap<>();
+    public static Map<Long, String> mapLongString = new HashMap<>();
+    public static Map<String, Long> mapStringLong = new HashMap<>();
 
     public HexMessage(byte[] inputArray) {
         super(inputArray);
-        longHexArray = new long[inputArray.length];
-        for (int i = 0; i < inputArray.length; i++) {
-            longHexArray[i] = (long)inputArray[i];
-        }
     }
 
     public HexMessage(String inputString) throws DecoderException, MessageConstructException {
-        String[] stringArray = inputString.toUpperCase().split("\\s+");
-        checkValid(stringArray);
-        longHexArray = new long[stringArray.length];
-        longHexArray = calcDecimalArray(stringArray);
+        super(inputString);
+        checkValid(getStringValuesArray());
+        long[] tempArray = calcDecimalArray(getStringValuesArray());
+        setLongValuesArray(tempArray);
     }
 
     public HexMessage(long[] inputArray) {
-        longHexArray = inputArray;
+        super(inputArray);
     }
 
     public AsciiMessage toAsciiMessage() throws MessageConstructException {
-        return new AsciiMessage(longHexArray);
+        return new AsciiMessage(getLongValuesArray());
     }
 
     public Base64Message toBase64Message() throws MessageConstructException {
-        return new Base64Message(longHexArray);
+        return new Base64Message(getLongValuesArray());
     }
 
     public BinaryMessage toBinaryMessage() throws MessageConstructException {
-        return new BinaryMessage(longHexArray);
+        return new BinaryMessage(getLongValuesArray());
     }
 
     public DecimalMessage toDecimalMessage() throws MessageConstructException {
-        return new DecimalMessage(longHexArray);
+        return new DecimalMessage(getLongValuesArray());
     }
 
     public OctalMessage toOctalMessage() throws MessageConstructException {
-        return new OctalMessage(longHexArray);
+        return new OctalMessage(getLongValuesArray());
     }
 
     private String calcHexValue(long value) {
-
         String result = "";
         while (value > 0) {
             long rem = value % 16;
@@ -84,9 +78,9 @@ public class HexMessage extends Message {
     @Override
     public String toString() {
         String result = "";
-        for (int i = 0; i < longHexArray.length; i++) {
-            result += calcHexValue(longHexArray[i]);
-            if (i != longHexArray.length - 1)
+        for (int i = 0; i < getLongValuesArray().length; i++) {
+            result += calcHexValue(getLongValuesArray()[i]);
+            if (i != getLongValuesArray().length - 1)
                 result += " ";
         }
         return result;

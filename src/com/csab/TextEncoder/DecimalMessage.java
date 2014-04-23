@@ -4,55 +4,59 @@ import java.util.Arrays;
 
 public class DecimalMessage extends Message {
 
-    private long[] longDecimalArray;
-
     public DecimalMessage(byte[] inputArray) throws MessageConstructException {
         super(inputArray);
-        longDecimalArray = new long[inputArray.length];
-        for (int i = 0; i < longDecimalArray.length; i++) {
-            longDecimalArray[i] = Long.parseLong(String.valueOf(inputArray[i]));
-        }
     }
 
-    public DecimalMessage(String inputString) throws NumberFormatException {
-        String[] stringArray = inputString.split("\\s+");
-        longDecimalArray = new long[stringArray.length];
-        for (int i = 0; i < stringArray.length; i++) {
-            longDecimalArray[i] = Long.parseLong(stringArray[i]);
+    public DecimalMessage(String inputString) throws MessageConstructException, NumberFormatException {
+        super(inputString);
+        checkValid(getStringValuesArray());
+        long[] tempArray = new long[getStringValuesArray().length];
+        for (int i = 0; i < getStringValuesArray().length; i++) {
+            tempArray[i] = Long.parseLong(getStringValuesArray()[i]);
         }
+        setLongValuesArray(tempArray);
     }
 
     public DecimalMessage(long[] inputArray) {
-        longDecimalArray = inputArray;
+        super(inputArray);
     }
 
     public AsciiMessage toAsciiMessage() throws MessageConstructException {
-        if (getCharacterCodeArray() != null) {
-            return new AsciiMessage(getCharacterCodeArray());
+        if (getByteValuesArray() != null) {
+            return new AsciiMessage(getByteValuesArray());
         } else {
-            return new AsciiMessage(longDecimalArray);
+            return new AsciiMessage(getLongValuesArray());
         }
     }
 
     public Base64Message toBase64Message() {
-        return new Base64Message(longDecimalArray);
+        return new Base64Message(getLongValuesArray());
     }
 
     public BinaryMessage toBinaryMessage() {
-        return new BinaryMessage(longDecimalArray);
+        return new BinaryMessage(getLongValuesArray());
     }
 
     public HexMessage toHexMessage() {
-        return new HexMessage(longDecimalArray);
+        return new HexMessage(getLongValuesArray());
     }
 
     public OctalMessage toOctalMesage() {
-        return new OctalMessage(longDecimalArray);
+        return new OctalMessage(getLongValuesArray());
     }
 
     @Override
     public String toString() {
-        return Arrays.toString(longDecimalArray).replaceAll("[^0-9\\s]","");
+        return Arrays.toString(getLongValuesArray()).replaceAll("[^0-9\\s]","");
     }
 
+    private boolean checkValid(String[] array) throws MessageConstructException {
+        for (String s : array) {
+            if (!s.matches("^[0-9]+$")) {
+                throw new MessageConstructException(MessageConstructException.INVALID_INPUT_MESSAGE);
+            }
+        }
+        return true;
+    }
 }

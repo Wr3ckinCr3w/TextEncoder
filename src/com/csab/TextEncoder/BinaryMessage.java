@@ -2,63 +2,56 @@ package com.csab.TextEncoder;
 
 public class BinaryMessage extends Message {
 
-    private long[] longBinaryArray;
     private static final int NUMBER_OF_BITS = 8;
 
     public BinaryMessage(byte[] inputArray) {
         super(inputArray);
-        longBinaryArray = new long[inputArray.length];
-        for (int i = 0; i < longBinaryArray.length; i++) {
-            longBinaryArray[i] = (long) inputArray[i];
-        }
     }
 
     public BinaryMessage(String inputString) throws MessageConstructException, NumberFormatException {
-        String[] stringArray = inputString.split("\\s+");
-        checkValid(stringArray);
-        longBinaryArray = new long[stringArray.length];
-        for (int i = 0; i < longBinaryArray.length; i++) {
-            longBinaryArray[i] = Long.parseLong(stringArray[i], 2);
+        super(inputString);
+        checkValid(getStringValuesArray());
+        long[] tempArray = new long[getStringValuesArray().length];
+        for (int i = 0; i < tempArray.length; i++) {
+            tempArray[i] = Long.parseLong(getStringValuesArray()[i], 2);
         }
+        setLongValuesArray(tempArray);
     }
 
     public BinaryMessage(long[] inputArray) {
-        longBinaryArray = new long[inputArray.length];
-        for (int i = 0; i < longBinaryArray.length; i++) {
-            longBinaryArray[i] = Long.parseLong(Long.toBinaryString(inputArray[i]), 2);
-        }
+        super(inputArray);
     }
 
     public AsciiMessage toAsciiMessage() throws MessageConstructException {
-        return new AsciiMessage(longBinaryArray);
+        return new AsciiMessage(getLongValuesArray());
     }
 
     public DecimalMessage toDecimalMessage() {
-        return new DecimalMessage(longBinaryArray);
+        return new DecimalMessage(getLongValuesArray());
     }
 
     public Base64Message toBase64Message() {
-        return new Base64Message(longBinaryArray);
+        return new Base64Message(getLongValuesArray());
     }
 
     public HexMessage toHexMessage() {
-        return new HexMessage(longBinaryArray);
+        return new HexMessage(getLongValuesArray());
     }
 
     public OctalMessage toOctalMessage() {
-        return new OctalMessage(longBinaryArray);
+        return new OctalMessage(getLongValuesArray());
     }
 
     @Override
     public String toString() {
-        String[] binaryStringArray = new String[longBinaryArray.length];
+        String[] binaryStringArray = new String[getLongValuesArray().length];
         String result = "";
-        for (int i = 0; i < longBinaryArray.length; i++) {
-            binaryStringArray[i] = Long.toBinaryString(longBinaryArray[i]);
+        for (int i = 0; i < getLongValuesArray().length; i++) {
+            binaryStringArray[i] = Long.toBinaryString(getLongValuesArray()[i]);
             while (binaryStringArray[i].length() < NUMBER_OF_BITS) {
                 binaryStringArray[i] = "0" + binaryStringArray[i];
             }
-            if (i == longBinaryArray.length - 1) {
+            if (i == getLongValuesArray().length - 1) {
                 result += binaryStringArray[i];
             } else {
                 result += binaryStringArray[i] + " ";

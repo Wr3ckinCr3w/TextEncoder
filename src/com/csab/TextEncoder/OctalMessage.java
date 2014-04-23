@@ -2,48 +2,43 @@ package com.csab.TextEncoder;
 
 public class OctalMessage extends Message {
 
-    private long[] longOctalArray;
-
     public OctalMessage(byte[] inputArray) {
         super(inputArray);
-        longOctalArray = new long[inputArray.length];
-        for (int i = 0; i < longOctalArray.length; i++) {
-            longOctalArray[i] = (long)inputArray[i];
-        }
     }
 
     public OctalMessage(String inputString) throws NumberFormatException, MessageConstructException {
-        String[] stringArray = inputString.split("\\s+");
-        checkValid(stringArray);
-        longOctalArray = new long[stringArray.length];
-        for (int i = 0; i < stringArray.length; i++) {
-            longOctalArray[i] = Long.parseLong(stringArray[i]);
+        super(inputString);
+        checkValid(getStringValuesArray());
+        long[] tempArray = new long[getStringValuesArray().length];
+        for (int i = 0; i < tempArray.length; i++) {
+            tempArray[i] = Long.parseLong(getStringValuesArray()[i]);
         }
-        longOctalArray = calcDecimalArray(longOctalArray);
+        tempArray = calcDecimalArray(tempArray);
+        setLongValuesArray(tempArray);
     }
 
     public OctalMessage(long[] inputArray) throws NumberFormatException {
-        longOctalArray = inputArray;
+        super(inputArray);
     }
 
     public AsciiMessage toAsciiMessage() throws MessageConstructException {
-        return new AsciiMessage(longOctalArray);
+        return new AsciiMessage(getLongValuesArray());
     }
 
     public Base64Message toBase64Message() {
-        return new Base64Message(longOctalArray);
+        return new Base64Message(getLongValuesArray());
     }
 
     public BinaryMessage toBinaryMessage() {
-        return new BinaryMessage(longOctalArray);
+        return new BinaryMessage(getLongValuesArray());
     }
 
     public DecimalMessage toDecimalMessage() {
-        return new DecimalMessage(longOctalArray);
+        return new DecimalMessage(getLongValuesArray());
     }
 
     public HexMessage toHexMessage() {
-        return new HexMessage(longOctalArray);
+        return new HexMessage(getLongValuesArray());
     }
 
     private long calcOctalValue(long value) {
@@ -71,9 +66,9 @@ public class OctalMessage extends Message {
     @Override
     public String toString() {
         String result = "";
-        for (int i = 0; i < longOctalArray.length; i++) {
-            result += calcOctalValue(longOctalArray[i]);
-            if (i != longOctalArray.length - 1)
+        for (int i = 0; i < getLongValuesArray().length; i++) {
+            result += calcOctalValue(getLongValuesArray()[i]);
+            if (i != getLongValuesArray().length - 1)
                 result += " ";
         }
         return result;

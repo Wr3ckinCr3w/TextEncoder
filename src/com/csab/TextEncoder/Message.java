@@ -1,31 +1,55 @@
 package com.csab.TextEncoder;
 
-import org.apache.commons.codec.binary.StringUtils;
-
 public class Message {
 
-    private byte[] characterCodeArray;
+    private byte[] byteValuesArray;
+    private long[] longValuesArray;
+    private String[] stringValuesArray;
 
     public Message() { }
 
     public Message(byte[] inputArray) {
-        characterCodeArray = inputArray;
+        byteValuesArray = inputArray;
+        longValuesArray = new long[inputArray.length];
+        for (int i = 0; i < longValuesArray.length; i++) {
+            longValuesArray[i] = (long)inputArray[i];
+        }
     }
 
     public Message(String inputString) {
-        characterCodeArray = StringUtils.getBytesUsAscii(inputString);
+        stringValuesArray = inputString.split("\\s+");
     }
 
-    public byte[] getCharacterCodeArray() {
-        return characterCodeArray;
+    public Message(long[] inputArray) {
+        longValuesArray = inputArray;
     }
 
-    public void setCharacterCodeArray(byte[] updatedArray) {
-        characterCodeArray = updatedArray;
+    public byte[] getByteValuesArray() {
+        return byteValuesArray;
+    }
+
+    public void setByteValuesArray(byte[] updatedArray) {
+        byteValuesArray = updatedArray;
+    }
+
+    public long[] getLongValuesArray() {
+        return longValuesArray;
+    }
+
+    public void setLongValuesArray(long[] updatedArray) {
+        longValuesArray = updatedArray;
+    }
+
+    public String[] getStringValuesArray() {
+        return stringValuesArray;
+    }
+
+    public void setStringValuesArray(String[] updatedArray) {
+        stringValuesArray = updatedArray;
     }
 
     @Override
     public String toString() {
-        return new String(characterCodeArray);
+        return new String(byteValuesArray);
     }
 }
