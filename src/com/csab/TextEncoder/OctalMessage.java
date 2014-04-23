@@ -1,13 +1,16 @@
 package com.csab.TextEncoder;
 
+import android.content.Context;
+
 public class OctalMessage extends Message {
 
     public OctalMessage(byte[] inputArray) {
         super(inputArray);
     }
 
-    public OctalMessage(String inputString) throws NumberFormatException, MessageConstructException {
-        super(inputString);
+    public OctalMessage(String inputString, Context context) throws NumberFormatException,
+            MessageConstructException {
+        super(inputString, context);
         checkValid(getStringValuesArray());
         long[] tempArray = new long[getStringValuesArray().length];
         for (int i = 0; i < tempArray.length; i++) {
@@ -57,7 +60,8 @@ public class OctalMessage extends Message {
     private boolean checkValid(String[] array) throws MessageConstructException {
         for (String s: array) {
             if (!s.matches("^[0-7]+$"))
-                throw new MessageConstructException(MessageConstructException.INVALID_INPUT_MESSAGE);
+                throw new MessageConstructException(
+                        getContext().getResources().getString(R.string.invalid_input_message));
         }
         return true;
     }

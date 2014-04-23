@@ -11,12 +11,16 @@
     <string name="rate_app">Rate App</string>
     <string name="input_prompt">Choose input type</string>
     <string name="target_prompt">Choose target type</string>
+    <string name="invalid_input_message">Invalid input format</string>
+    <string name="equal_types_message">Input / output types are the same</string>
+    <string name="market_url">market://details?id=</string>
+    <string name="http_url">http://play.google.com/store/apps/details?id=</string>
     <string-array name="types_array">
         <item>ASCII</item>
         <item>Binary</item>
         <item>Decimal</item>
         <item>Hex</item>
-        <item>Base64</item>
         <item>Octal</item>
+        <item>Base64</item>
     </string-array>
 </resources>

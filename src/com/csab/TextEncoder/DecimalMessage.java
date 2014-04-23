@@ -1,6 +1,7 @@
 package com.csab.TextEncoder;
 
 import java.util.Arrays;
+import android.content.Context;
 
 public class DecimalMessage extends Message {
 
@@ -8,8 +9,9 @@ public class DecimalMessage extends Message {
         super(inputArray);
     }
 
-    public DecimalMessage(String inputString) throws MessageConstructException, NumberFormatException {
-        super(inputString);
+    public DecimalMessage(String inputString, Context context) throws MessageConstructException,
+            NumberFormatException {
+        super(inputString, context);
         checkValid(getStringValuesArray());
         long[] tempArray = new long[getStringValuesArray().length];
         for (int i = 0; i < getStringValuesArray().length; i++) {
@@ -30,7 +32,8 @@ public class DecimalMessage extends Message {
     private boolean checkValid(String[] array) throws MessageConstructException {
         for (String s : array) {
             if (!s.matches("^[0-9]+$")) {
-                throw new MessageConstructException(MessageConstructException.INVALID_INPUT_MESSAGE);
+                throw new MessageConstructException(
+                        getContext().getResources().getString(R.string.invalid_input_message));
             }
         }
         return true;

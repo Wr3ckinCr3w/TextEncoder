@@ -1,5 +1,7 @@
 package com.csab.TextEncoder;
 
+import android.content.Context;
+
 public class BinaryMessage extends Message {
 
     private static final int NUMBER_OF_BITS = 8;
@@ -8,8 +10,9 @@ public class BinaryMessage extends Message {
         super(inputArray);
     }
 
-    public BinaryMessage(String inputString) throws MessageConstructException, NumberFormatException {
-        super(inputString);
+    public BinaryMessage(String inputString, Context context) throws MessageConstructException,
+            NumberFormatException {
+        super(inputString, context);
         checkValid(getStringValuesArray());
         long[] tempArray = new long[getStringValuesArray().length];
         for (int i = 0; i < tempArray.length; i++) {
@@ -43,7 +46,8 @@ public class BinaryMessage extends Message {
     private boolean checkValid(String[] array) throws MessageConstructException {
         for (String s : array) {
             if (!s.matches("^[01]+$")) {
-                throw new MessageConstructException(MessageConstructException.INVALID_INPUT_MESSAGE);
+                throw new MessageConstructException(
+                        getContext().getResources().getString(R.string.invalid_input_message));
             }
         }
         return true;

@@ -1,10 +1,13 @@
 package com.csab.TextEncoder;
 
+import android.content.Context;
+
 public class Message implements Converter<Message, Class> {
 
     private byte[] byteValuesArray;
     private long[] longValuesArray;
     private String[] stringValuesArray;
+    private Context messageContext;
 
     public Message() { }
 
@@ -16,8 +19,9 @@ public class Message implements Converter<Message, Class> {
         }
     }
 
-    public Message(String inputString) {
+    public Message(String inputString, Context context) {
         stringValuesArray = inputString.split("\\s+");
+        messageContext = context;
     }
 
     public Message(long[] inputArray) {
@@ -47,6 +51,8 @@ public class Message implements Converter<Message, Class> {
     public void setStringValuesArray(String[] updatedArray) {
         stringValuesArray = updatedArray;
     }
+
+    public Context getContext() { return messageContext; }
 
     public <T> T convert(Class<T> clazz) throws Exception {
         return clazz.getConstructor(long[].class).newInstance(getLongValuesArray());

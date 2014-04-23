@@ -1,8 +1,9 @@
 package com.csab.TextEncoder;
 
-import org.apache.commons.codec.DecoderException;
 import java.util.Map;
 import java.util.HashMap;
+import android.content.Context;
+import org.apache.commons.codec.DecoderException;
 
 public class HexMessage extends Message {
 
@@ -13,8 +14,9 @@ public class HexMessage extends Message {
         super(inputArray);
     }
 
-    public HexMessage(String inputString) throws DecoderException, MessageConstructException {
-        super(inputString.toUpperCase());
+    public HexMessage(String inputString, Context context) throws DecoderException,
+            MessageConstructException {
+        super(inputString.toUpperCase(), context);
         checkValid(getStringValuesArray());
         long[] tempArray = calcDecimalArray(getStringValuesArray());
         setLongValuesArray(tempArray);
@@ -69,7 +71,8 @@ public class HexMessage extends Message {
     public boolean checkValid(String[] array) throws MessageConstructException {
         for (String s: array) {
             if(!s.matches("^[A-F0-9]+$"))
-                throw new MessageConstructException(MessageConstructException.INVALID_INPUT_MESSAGE);
+                throw new MessageConstructException(
+                        getContext().getResources().getString(R.string.invalid_input_message));
         }
         return true;
     }

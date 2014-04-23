@@ -1,7 +1,8 @@
 package com.csab.TextEncoder;
 
-import org.apache.commons.codec.binary.StringUtils;
 import java.util.Arrays;
+import android.content.Context;
+import org.apache.commons.codec.binary.StringUtils;
 
 public class AsciiMessage extends Message {
 
@@ -9,7 +10,7 @@ public class AsciiMessage extends Message {
         super(inputArray);
     }
 
-    public AsciiMessage(String inputString) {
+    public AsciiMessage(String inputString, Context context) {
         setByteValuesArray(inputString.getBytes());
     }
 
@@ -25,26 +26,6 @@ public class AsciiMessage extends Message {
             }
             setByteValuesArray(byteArray);
         }
-    }
-
-    public Base64Message toBase64Message()  {
-        return new Base64Message(getByteValuesArray());
-    }
-
-    public BinaryMessage toBinaryMessage() throws MessageConstructException {
-        return new BinaryMessage(getByteValuesArray());
-    }
-
-    public DecimalMessage toDecimalMessage() throws MessageConstructException {
-        return new DecimalMessage(getByteValuesArray());
-    }
-
-    public HexMessage toHexMessage() {
-        return new HexMessage(getByteValuesArray());
-    }
-
-    public OctalMessage toOctalMessage() {
-        return new OctalMessage(getByteValuesArray());
     }
 
     public <T> T convert(Class<T> clazz) throws Exception {

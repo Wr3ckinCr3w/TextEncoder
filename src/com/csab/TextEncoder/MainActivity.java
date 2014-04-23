@@ -1,15 +1,19 @@
 package com.csab.TextEncoder;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.lang.reflect.Method;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ActivityNotFoundException;
 import android.text.ClipboardManager;
 import android.os.Bundle;
-import android.content.Intent;
 import android.net.Uri;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
-import org.apache.commons.codec.DecoderException;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
@@ -20,8 +24,7 @@ public class MainActivity extends SherlockActivity {
     private Spinner mInputTypeSpinner, mTargetTypeSpinner;
     private EditText mInputEditText, mOutputEditText;
     private String mInputTextString;
-    private static final String DEFAULT_TARGET_TYPE = "Binary";
-    private static final String EQUAL_TYPES_MESSAGE = "Input / output types are the same";
+    private Map<Integer, String> mClassMap = new HashMap<>();
     private static final int ASCII_ID = 0;
     private static final int BINARY_ID = 1;
     private static final int DECIMAL_ID = 2;
@@ -29,11 +32,13 @@ public class MainActivity extends SherlockActivity {
     private static final int OCTAL_ID = 4;
     private static final int BASE64_ID = 5;
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+
+        // Load HashMaps
+        loadHashMaps();
 
         // Initialize UI objects
         mClipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
@@ -50,10 +55,7 @@ public class MainActivity extends SherlockActivity {
                 R.array.types_array, R.layout.dropdown_item);
         mInputTypeSpinner.setAdapter(dataAdapter);
         mTargetTypeSpinner.setAdapter(dataAdapter);
-        mTargetTypeSpinner.setSelection(dataAdapter.getPosition(DEFAULT_TARGET_TYPE));
-
-        // Load HexMessage HashMaps
-        loadHashMaps();
+        mTargetTypeSpinner.setSelection(BINARY_ID);
 
         // Add TextChanged listener
         mInputEditText.addTextChangedListener(new TextWatcher() {
@@ -111,44 +113,36 @@ public class MainActivity extends SherlockActivity {
         }
     }
 
+    private void openPlayStore() {
+        final String appPackageName = getPackageName();
+        try {
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.market_url)
+                    + appPackageName)));
+        } catch (ActivityNotFoundException e) {
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.http_url)
+                    + appPackageName)));
+        }
+    }
+
     private void startProcess() {
         // Check if input type and output type are the same
         if (selectedTypesAreEqual()) {
-            Toast.makeText(getBaseContext(), EQUAL_TYPES_MESSAGE, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getBaseContext(), getString(R.string.equal_types_message), Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // TODO: Implement reflection to call conversion methods at runtime
-        Message message;
-        // Construct appropriate message type, call encoding method
+        // Attempt conversion from input -> target type
         try {
-            switch ((int) mInputTypeSpinner.getSelectedItemId()) {
-                case ASCII_ID:
-                    message = new AsciiMessage(mInputTextString);
-                    convertFromAscii((AsciiMessage)message);
-                    break;
-                case BASE64_ID:
-                    message = new Base64Message(mInputTextString);
-                    convertFromBase64((Base64Message) message);
-                    break;
-                case BINARY_ID:
-                    message = new BinaryMessage(mInputTextString);
-                    convertFromBinary((BinaryMessage) message);
-                    break;
-                case DECIMAL_ID:
-                    message = new DecimalMessage(mInputTextString);
-                    convertFromDecimal((DecimalMessage) message);
-                    break;
-                case HEX_ID:
-                    message = new HexMessage(mInputTextString);
-                    convertFromHex((HexMessage) message);
-                    break;
-                case OCTAL_ID:
-                    message = new OctalMessage(mInputTextString);
-                    convertFromOctal((OctalMessage) message);
-                    break;
-            }
-        } catch (MessageConstructException | NumberFormatException | DecoderException e) {
+            Class<?> clazz = Class.forName(mClassMap.get(mInputTypeSpinner.getSelectedItemPosition()));
+            Object inputObject = clazz.getConstructor(
+                    String.class, Context.class).newInstance(mInputTextString, getBaseContext());
+            Method method = inputObject.getClass().getMethod("convert", Class.class);
+            Object outputObject = method.invoke(inputObject, Class.forName(
+                    mClassMap.get(mTargetTypeSpinner.getSelectedItemPosition())));
+            updateOutputTextBox(outputObject.toString());
+        } catch (Exception e) {
+            while(e.getCause() != null)
+                e = (Exception)e.getCause();
             Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
@@ -158,203 +152,27 @@ public class MainActivity extends SherlockActivity {
                 mTargetTypeSpinner.getSelectedItem().toString()));
     }
 
-    private void openPlayStore() {
-        final String appPackageName = getPackageName();
-        try {
-            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
-        } catch (android.content.ActivityNotFoundException anfe) {
-            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" +
-                    appPackageName)));
-        }
-    }
-
     private void updateOutputTextBox(String output) {
         mOutputEditText.setText(output);
     }
       
-    private void convertFromAscii(AsciiMessage message) {
-        try {
-            switch ((int) mTargetTypeSpinner.getSelectedItemId()) {
-                case BASE64_ID:
-                    Base64Message b64m = message.toBase64Message();
-                    updateOutputTextBox(b64m.toString());
-                    break;
-                case BINARY_ID:
-                    BinaryMessage bm = message.toBinaryMessage();
-                    updateOutputTextBox(bm.toString());
-                    break;
-                case DECIMAL_ID:
-                    DecimalMessage dm = message.toDecimalMessage();
-                    updateOutputTextBox(dm.toString());
-                    break;
-                case HEX_ID:
-                    HexMessage hm = message.toHexMessage();
-                    updateOutputTextBox(hm.toString());
-                    break;
-                case OCTAL_ID:
-                    OctalMessage om = message.toOctalMessage();
-                    updateOutputTextBox(om.toString());
-                    break;
-            }
-        } catch (MessageConstructException e) {
-            Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void convertFromBase64(Base64Message message) {
-        try {
-            switch ((int) mTargetTypeSpinner.getSelectedItemId()) {
-                case ASCII_ID:
-                    AsciiMessage am = message.toAsciiMessage();
-                    updateOutputTextBox(am.toString());
-                    break;
-                case BINARY_ID:
-                    BinaryMessage bm = message.toBinaryMessage();
-                    updateOutputTextBox(bm.toString());
-                    break;
-                case DECIMAL_ID:
-                    DecimalMessage dm = message.toDecimalMessage();
-                    updateOutputTextBox(dm.toString());
-                    break;
-                case HEX_ID:
-                    HexMessage hm = message.toHexMessage();
-                    updateOutputTextBox(hm.toString());
-                    break;
-                case OCTAL_ID:
-                    OctalMessage om = message.toOctalMessage();
-                    updateOutputTextBox(om.toString());
-                    break;
-            }
-        } catch (MessageConstructException e) {
-            Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void convertFromBinary(BinaryMessage message) {
-        try {
-            switch ((int) mTargetTypeSpinner.getSelectedItemId()) {
-                case ASCII_ID:
-                    AsciiMessage am = message.toAsciiMessage();
-                    updateOutputTextBox(am.toString());
-                    break;
-                case BASE64_ID:
-                    Base64Message b64m = message.toBase64Message();
-                    updateOutputTextBox(b64m.toString());
-                    break;
-                case DECIMAL_ID:
-                    DecimalMessage dm = message.toDecimalMessage();
-                    updateOutputTextBox(dm.toString());
-                    break;
-                case HEX_ID:
-                    HexMessage hm = message.toHexMessage();
-                    updateOutputTextBox(hm.toString());
-                    break;
-                case OCTAL_ID:
-                    OctalMessage om = message.toOctalMessage();
-                    updateOutputTextBox(om.toString());
-                    break;
-            }
-        } catch (MessageConstructException e) {
-            Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void convertFromDecimal(DecimalMessage message) {
-        try {
-            switch ((int) mTargetTypeSpinner.getSelectedItemId()) {
-                case ASCII_ID:
-                    AsciiMessage am = message.toAsciiMessage();
-                    updateOutputTextBox(am.toString());
-                    break;
-                case BASE64_ID:
-                    Base64Message b64m = message.toBase64Message();
-                    updateOutputTextBox(b64m.toString());
-                    break;
-                case BINARY_ID:
-                    BinaryMessage bm = message.toBinaryMessage();
-                    updateOutputTextBox(bm.toString());
-                    break;
-                case HEX_ID:
-                    HexMessage hm = message.toHexMessage();
-                    updateOutputTextBox(hm.toString());
-                    break;
-                case OCTAL_ID:
-                    OctalMessage om = message.toOctalMesage();
-                    updateOutputTextBox(om.toString());
-                    break;
-            }
-        } catch (MessageConstructException e) {
-            Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void convertFromHex(HexMessage message) {
-        try {
-            switch ((int) mTargetTypeSpinner.getSelectedItemId()) {
-                case ASCII_ID:
-                    AsciiMessage am = message.toAsciiMessage();
-                    updateOutputTextBox(am.toString());
-                    break;
-                case BASE64_ID:
-                    Base64Message b64m = message.toBase64Message();
-                    updateOutputTextBox(b64m.toString());
-                    break;
-                case BINARY_ID:
-                    BinaryMessage bm = message.toBinaryMessage();
-                    updateOutputTextBox(bm.toString());
-                    break;
-                case DECIMAL_ID:
-                    DecimalMessage dm = message.toDecimalMessage();
-                    updateOutputTextBox(dm.toString());
-                    break;
-                case OCTAL_ID:
-                    OctalMessage om = message.toOctalMessage();
-                    updateOutputTextBox(om.toString());
-                    break;
-            }
-        } catch (MessageConstructException e) {
-            Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void convertFromOctal(OctalMessage message) {
-        try {
-            switch ((int) mTargetTypeSpinner.getSelectedItemId()) {
-                case ASCII_ID:
-                    AsciiMessage am = message.toAsciiMessage();
-                    updateOutputTextBox(am.toString());
-                    break;
-                case BASE64_ID:
-                    Base64Message b64m = message.toBase64Message();
-                    updateOutputTextBox(b64m.toString());
-                    break;
-                case BINARY_ID:
-                    BinaryMessage bm = message.toBinaryMessage();
-                    updateOutputTextBox(bm.toString());
-                    break;
-                case DECIMAL_ID:
-                    DecimalMessage dm = message.toDecimalMessage();
-                    updateOutputTextBox(dm.toString());
-                    break;
-                case HEX_ID:
-                    HexMessage hm = message.toHexMessage();
-                    updateOutputTextBox(hm.toString());
-                    break;
-            }
-        } catch (MessageConstructException e) {
-            Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-    }
-
     private void loadHashMaps() {
-        // Load first map
+        // Load Message subclass map
+        mClassMap.put(ASCII_ID, AsciiMessage.class.getCanonicalName());
+        mClassMap.put(BINARY_ID, BinaryMessage.class.getCanonicalName());
+        mClassMap.put(DECIMAL_ID, DecimalMessage.class.getCanonicalName());
+        mClassMap.put(HEX_ID, HexMessage.class.getCanonicalName());
+        mClassMap.put(OCTAL_ID, OctalMessage.class.getCanonicalName());
+        mClassMap.put(BASE64_ID, Base64Message.class.getCanonicalName());
+
+        // Load first Hex map
         HexMessage.mapLongString.put(10L, "A");
         HexMessage.mapLongString.put(11L, "B");
         HexMessage.mapLongString.put(12L, "C");
         HexMessage.mapLongString.put(13L, "D");
         HexMessage.mapLongString.put(14L, "E");
         HexMessage.mapLongString.put(15L, "F");
-        // Load second map
+        // Load second Hex map
         HexMessage.mapStringLong.put("A", 10L);
         HexMessage.mapStringLong.put("B", 11L);
         HexMessage.mapStringLong.put("C", 12L);
