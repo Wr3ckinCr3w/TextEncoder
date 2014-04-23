@@ -15,6 +15,7 @@ public class OctalMessage extends Message {
     public OctalMessage(String inputString) throws NumberFormatException, MessageConstructException {
         String[] stringArray = inputString.split("\\s+");
         checkValid(stringArray);
+        longOctalArray = new long[stringArray.length];
         for (int i = 0; i < stringArray.length; i++) {
             longOctalArray[i] = Long.parseLong(stringArray[i]);
         }

@@ -21,6 +21,7 @@ public class HexMessage extends Message {
     public HexMessage(String inputString) throws DecoderException, MessageConstructException {
         String[] stringArray = inputString.toUpperCase().split("\\s+");
         checkValid(stringArray);
+        longHexArray = new long[stringArray.length];
         longHexArray = calcDecimalArray(stringArray);
     }
 
