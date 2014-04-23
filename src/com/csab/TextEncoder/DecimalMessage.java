@@ -22,30 +22,6 @@ public class DecimalMessage extends Message {
         super(inputArray);
     }
 
-    public AsciiMessage toAsciiMessage() throws MessageConstructException {
-        if (getByteValuesArray() != null) {
-            return new AsciiMessage(getByteValuesArray());
-        } else {
-            return new AsciiMessage(getLongValuesArray());
-        }
-    }
-
-    public Base64Message toBase64Message() {
-        return new Base64Message(getLongValuesArray());
-    }
-
-    public BinaryMessage toBinaryMessage() {
-        return new BinaryMessage(getLongValuesArray());
-    }
-
-    public HexMessage toHexMessage() {
-        return new HexMessage(getLongValuesArray());
-    }
-
-    public OctalMessage toOctalMesage() {
-        return new OctalMessage(getLongValuesArray());
-    }
-
     @Override
     public String toString() {
         return Arrays.toString(getLongValuesArray()).replaceAll("[^0-9\\s]","");

@@ -1,6 +1,6 @@
 package com.csab.TextEncoder;
 
-public class Message {
+public class Message implements Converter<Message, Class> {
 
     private byte[] byteValuesArray;
     private long[] longValuesArray;
@@ -46,6 +46,10 @@ public class Message {
 
     public void setStringValuesArray(String[] updatedArray) {
         stringValuesArray = updatedArray;
+    }
+
+    public <T> T convert(Class<T> clazz) throws Exception {
+        return clazz.getConstructor(long[].class).newInstance(getLongValuesArray());
     }
 
     @Override

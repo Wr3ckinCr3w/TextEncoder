@@ -24,26 +24,6 @@ public class HexMessage extends Message {
         super(inputArray);
     }
 
-    public AsciiMessage toAsciiMessage() throws MessageConstructException {
-        return new AsciiMessage(getLongValuesArray());
-    }
-
-    public Base64Message toBase64Message() throws MessageConstructException {
-        return new Base64Message(getLongValuesArray());
-    }
-
-    public BinaryMessage toBinaryMessage() throws MessageConstructException {
-        return new BinaryMessage(getLongValuesArray());
-    }
-
-    public DecimalMessage toDecimalMessage() throws MessageConstructException {
-        return new DecimalMessage(getLongValuesArray());
-    }
-
-    public OctalMessage toOctalMessage() throws MessageConstructException {
-        return new OctalMessage(getLongValuesArray());
-    }
-
     private String calcHexValue(long value) {
         String result = "";
         while (value > 0) {

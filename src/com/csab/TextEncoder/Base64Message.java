@@ -18,24 +18,8 @@ public class Base64Message extends Message {
         super(inputArray);
     }
 
-    public AsciiMessage toAsciiMessage() {
-        return new AsciiMessage(getByteValuesArray());
-    }
-
-    public BinaryMessage toBinaryMessage() {
-        return new BinaryMessage(getByteValuesArray());
-    }
-
-    public DecimalMessage toDecimalMessage() throws MessageConstructException {
-        return new DecimalMessage(getByteValuesArray());
-    }
-
-    public HexMessage toHexMessage() {
-        return new HexMessage(getByteValuesArray());
-    }
-
-    public OctalMessage toOctalMessage() {
-        return new OctalMessage(getByteValuesArray());
+    public <T> T convert(Class<T> clazz) throws Exception {
+        return clazz.getConstructor(byte[].class).newInstance(getByteValuesArray());
     }
 
     @Override

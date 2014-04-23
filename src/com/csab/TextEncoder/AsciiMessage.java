@@ -47,6 +47,10 @@ public class AsciiMessage extends Message {
         return new OctalMessage(getByteValuesArray());
     }
 
+    public <T> T convert(Class<T> clazz) throws Exception {
+        return clazz.getConstructor(byte[].class).newInstance(getByteValuesArray());
+    }
+
     @Override
     public String toString() {
         return StringUtils.newStringUsAscii(getByteValuesArray());

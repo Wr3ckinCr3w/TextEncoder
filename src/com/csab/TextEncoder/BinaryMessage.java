@@ -22,26 +22,6 @@ public class BinaryMessage extends Message {
         super(inputArray);
     }
 
-    public AsciiMessage toAsciiMessage() throws MessageConstructException {
-        return new AsciiMessage(getLongValuesArray());
-    }
-
-    public DecimalMessage toDecimalMessage() {
-        return new DecimalMessage(getLongValuesArray());
-    }
-
-    public Base64Message toBase64Message() {
-        return new Base64Message(getLongValuesArray());
-    }
-
-    public HexMessage toHexMessage() {
-        return new HexMessage(getLongValuesArray());
-    }
-
-    public OctalMessage toOctalMessage() {
-        return new OctalMessage(getLongValuesArray());
-    }
-
     @Override
     public String toString() {
         String[] binaryStringArray = new String[getLongValuesArray().length];

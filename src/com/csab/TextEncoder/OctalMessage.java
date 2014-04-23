@@ -21,26 +21,6 @@ public class OctalMessage extends Message {
         super(inputArray);
     }
 
-    public AsciiMessage toAsciiMessage() throws MessageConstructException {
-        return new AsciiMessage(getLongValuesArray());
-    }
-
-    public Base64Message toBase64Message() {
-        return new Base64Message(getLongValuesArray());
-    }
-
-    public BinaryMessage toBinaryMessage() {
-        return new BinaryMessage(getLongValuesArray());
-    }
-
-    public DecimalMessage toDecimalMessage() {
-        return new DecimalMessage(getLongValuesArray());
-    }
-
-    public HexMessage toHexMessage() {
-        return new HexMessage(getLongValuesArray());
-    }
-
     private long calcOctalValue(long value) {
         String result = "";
         while (value > 0) {
