@@ -52,10 +52,31 @@ public class MainActivity extends SherlockActivity {
 
         // Set up Spinner arrays
         ArrayAdapter<CharSequence> dataAdapter = ArrayAdapter.createFromResource(getBaseContext(),
-                R.array.types_array, R.layout.dropdown_item);
+                R.array.array_all, R.layout.dropdown_item);
         mInputTypeSpinner.setAdapter(dataAdapter);
         mTargetTypeSpinner.setAdapter(dataAdapter);
         mTargetTypeSpinner.setSelection(BINARY_ID);
+
+        // Add OnItemSelected listener
+        mInputTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+                String name;
+                if (pos == ASCII_ID) {
+                    name = "array_all";
+                } else if (pos > ASCII_ID && pos < BASE64_ID) {
+                    name = "array_nob64";
+                } else {
+                    name = "array_ascii_only";
+                }
+                int resource = getResources().getIdentifier(name, "array", getPackageName());
+                mTargetTypeSpinner.setAdapter(ArrayAdapter.createFromResource(getBaseContext(),
+                    resource, R.layout.dropdown_item));
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
 
         // Add TextChanged listener
         mInputEditText.addTextChangedListener(new TextWatcher() {
