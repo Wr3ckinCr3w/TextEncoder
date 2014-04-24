@@ -25,6 +25,7 @@ public class MainActivity extends SherlockActivity {
     private EditText mInputEditText, mOutputEditText;
     private String mInputTextString;
     private Map<Integer, String> mClassMap = new HashMap<>();
+    private boolean mIsInitialSelection = true;
     private static final int ASCII_ID = 0;
     private static final int BINARY_ID = 1;
     private static final int DECIMAL_ID = 2;
@@ -55,7 +56,6 @@ public class MainActivity extends SherlockActivity {
                 R.array.array_all, R.layout.dropdown_item);
         mInputTypeSpinner.setAdapter(dataAdapter);
         mTargetTypeSpinner.setAdapter(dataAdapter);
-        mTargetTypeSpinner.setSelection(BINARY_ID);
 
         // Add OnItemSelected listener
         mInputTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -70,8 +70,13 @@ public class MainActivity extends SherlockActivity {
                     name = "array_ascii_only";
                 }
                 int resource = getResources().getIdentifier(name, "array", getPackageName());
-                mTargetTypeSpinner.setAdapter(ArrayAdapter.createFromResource(getBaseContext(),
-                    resource, R.layout.dropdown_item));
+                if (mIsInitialSelection) {
+                    mTargetTypeSpinner.setSelection(BINARY_ID);
+                    mIsInitialSelection = false;
+                } else {
+                    mTargetTypeSpinner.setAdapter(ArrayAdapter.createFromResource(getBaseContext(),
+                        resource, R.layout.dropdown_item));
+                }
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
